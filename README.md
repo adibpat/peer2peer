@@ -1,1 +1,1 @@
-# peer2peer
+Peer 2 Peer protocol to share files (RFCs) between peers
