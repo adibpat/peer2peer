@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 #########################################
 #           RS Server File              #
 #########################################
@@ -10,13 +12,17 @@ class RfpServer(object):
     RSconnections = []
     
     def __init__(self):
-        """ Initialize socket"""
+
         self.listen_socket = listen_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         listen_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         listen_socket.bind((self.HOST, self.PORT))
         listen_socket.listen(5)
 
     def generate_cookie(self):
+        """ 
+        Generates a cookie for a new connection 
+        
+        """
         cl = len(self.cookie_list)
         for cookie in range(1,cl+1):
             if cookie not in self.cookie_list:
@@ -40,6 +46,15 @@ class RfpServer(object):
                 print 'RS connection list: ',self.RSconnections
                 client_connection.send(str(cookie))
                 print 'Sent cookie ',cookie
+            elif rlist[0] == 'PQuery':
+                for hosts in self.RSconnections:
+#                   if hosts['host'][0] != client_address:
+                    actPeer = hosts['host'][0] + ' ' + str(hosts['host'][1])
+                    print actPeer
+                    client_connection.send(actPeer)
+                final_msg = 'PQuery Response End'
+                print final_msg
+                client_connection.send(final_msg)
             else:
                 print 'Received ',request
 
